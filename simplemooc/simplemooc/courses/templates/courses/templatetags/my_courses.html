@@ -1,0 +1,12 @@
+<!-- responsavel pela template tag que renderiza os cursos-->
+<li class="pure-menu-heading">Meus Cursos</li>
+{% for enrollment in enrollments %}
+<li>
+	<a href="{% url 'courses:announcements' enrollment.course.slug %}"> 
+		<!-- Redireciona para a url @param1 e passa o slug do curso que condiz com a inscrição instanciada-->
+	<i class="fa fa-book"></i> {{ enrollment.course }}
+	</a>
+</li>
+{% empty %}
+<li>Nenhuma inscrição</li>
+{% endfor %}

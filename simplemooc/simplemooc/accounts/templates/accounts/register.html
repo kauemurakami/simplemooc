@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="content">
+    <div class="pure-g-r content-ribbon">
+        <div class="pure-u-1">
+            <h2>Informe seus dados para o cadastro</h2>
+            <form class="pure-form pure-form-stacked" method="POST">
+                {% csrf_token %}
+                <fieldset>
+                    {{ form.non_field_errors }}<!-- Valida cada possivel erro usuario n exsite, senha errrada etc-->
+                    {% for field in form %}
+                    <div class="pure-control-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                    {% endfor %}
+
+                    <div class="pure-controls"><br/>
+                        <button type="submit" class="pure-button pure-button-primary">Cadastrar</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "accounts/dashboard.html" %}
+
+    {% block breadcrumb %}
+        {{block.super}}
+        <li>/</li>             
+         <!-- Todo contexto que herda de dashboard deve ter um curso isntanciado e passado para o contexto -->
+        <li><a href="{% url 'courses:announcements' course.slug %}">{{course}}</a></li>
+    {% endblock  %}
+    
+{% block menu_options %} <!-- Menu interno do curso-->
+
+
+<li class="pure-menu-heading">
+    {{ course.name }}
+</li>
+<li>
+    <a href="#">
+        <i class="fas fa-chalkboard-teacher"></i>
+        Aulas e Materiais
+    </a>
+</li>
+<li>
+    <a href="#">
+        <i class="fa fa-info-circle"></i>
+        Informações
+    </a>
+</li>
+<li>
+    <a href="#">
+        <i class="fa fa-envelope"></i>
+        Anúncios
+    </a>
+</li>
+<li>
+    <a href="#">
+        <i class="fa fa-comments"></i>
+        Fórum de Dúvidas
+    </a>
+</li>
+<li class="pure-menu-heading">
+    Cursos
+</li>
+{{ block.super}} <!-- Responsavel por chamar o conteudo base do bloco-->
+{% endblock  %}

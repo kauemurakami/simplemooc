@@ -1,0 +1,15 @@
+{% for enrollment in enrollments %}
+<div class="well"> 
+	<h3> {{enrollment.course}} 
+		({{ enrollment.course.start_date|date:'d/m/Y' }})
+	</h3>
+	<p> {{enrollment.course.description }} </p>
+	<div class="pure-controls">
+		<a href="{% url 'courses:announcements' enrollment.course.slug %}" class="pure-button-primary">Acessar</a>
+		<!-- Parâmetros passados são recebidos no slug da url para serem usados na view -->
+		<a href="{% url 'courses:undo_enrollment' enrollment.course.slug %}" class="pure-button-danger">Cancelar</a>
+	</div>
+</div>
+{% empty %}
+<li>Nenhuma inscrição</li>
+{% endfor %}
