@@ -91,14 +91,17 @@ def show_announcement(request, slug, pk):
 		if not enrollment.is_aproved():
 			messages.error(request, 'Sua inscrição está pendente')
 			return redirect('accounts:dashboard')
+	announcements = get_object_or_404(course.announcements.all(), pk=pk)
 	form = CommentForm(request.POST or None)
 	if form.is_valid():
-		form.save() # cria e salva o commentario
+		comment = form.save(commit=False) # recebe e cria o objeto MAS NÃO SALVA obs commit=FALSE
+		comment.user = request.user
+		comment.announcement = announcements
+		comment.save()
 		form = CommentForm()
 		messages.success(request,'Comentário enviado com sucesso')
 	template_name = 'courses/show_announcement.html'
-	announcements = get_object_or_404(course.announcements.all(), pk=pk)
-	context = {'course':course, 'announcements': announcements, 'form': form,}
+	context = {'course':course, 'announcement': announcement, 'form': form,}
 	return render(request, template_name, context)
 
 """com busca apartir da pk

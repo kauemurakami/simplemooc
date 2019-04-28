@@ -3,8 +3,8 @@
 {% block dashboard_content %}
 
 <div class="well">
-	<h2>{{ announcements.title }}</h2>
-	{{ announcements.content|linebreaks}}
+	<h2>{{ announcement.title }}</h2>
+	{{ announcement.content|linebreaks}}
 
 </div>
 <div class="well">
@@ -22,21 +22,19 @@
 		{% endfor %}
 		<form action="" method="POST">
 			{% csrf_token %}
-			<fieldset>
+			
+				{{form.non_field_errors}}
 				{% for field in form %}
+				<div class="pure-control-group">
 					{{field.lavel_tag}}
 					{{field}}
 					{{field.errors}}
-
-				{% endfor %}
-				<div class="pure-control-group">
-					<label for="password"> Comentário </label><br/>
-					<textarea cols="40" rows="4"></textarea>
 				</div>		
+				{% endfor %}
 				<div class="pure-controls"><br/>
 					<button type="submit" class="pure-button pure-button-primary">Enviar</button>
 				</div>
-			</fieldset>	
+			
 		</form>
 	</div>
 	{% endblock  %}
