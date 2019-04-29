@@ -14,6 +14,7 @@ class CourseAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'slug':('name',)} # aqui p slug vai ser baseado no nome do curso e sofrerá os replaces
 											 # necessários para satisfazer o tipo slug
 
+
 #registra o curso
 admin.site.register(Course, CourseAdmin)
 admin.site.register([Enrollment,Announcement,Comment])

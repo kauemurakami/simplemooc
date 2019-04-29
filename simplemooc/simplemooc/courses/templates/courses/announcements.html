@@ -12,7 +12,7 @@
   </h2>
   {{announcement.content|linebreaks }}
   <p>
-    <a href="{% url 'courses:show_announcement' course.slug announcement.pk %}#comments" title="">
+    <a href="{% url 'courses:show_announcement' course.slug announcement.pk %}" title="">
         <i class="far fa-comments"></i> 
                 {% with comments_count=announcement.comments.count  %} <!-- templatetag para que possamos realizar ações e atribuir a uma variavel
                 e essa variavel pode ser usada em algum bloco-->
