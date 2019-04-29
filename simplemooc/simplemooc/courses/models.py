@@ -3,6 +3,9 @@ from simplemooc.accounts.models import User
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from django.dispatch   import receiver
+from simplemooc.core.mail import send_mail_template
+
 
 # curso custom
 class CourseManager(models.Manager):
@@ -141,3 +144,15 @@ class Comment(models.Model):
 		verbose_name = 'Comentário'
 		verbose_name_plural = 'Comentários'
 		ordering= ['created_at'] # forma de fila
+
+# post_save
+@receiver(models.signals.post_save, sender = Announcement, dispatch_uid='post_save_announcement') #sender classe de chamada, indica qual o model
+def post_save_announcement(instance, created, **kwargs):
+	if created:
+		subject = instance.title
+		context = { 'announcement': instance ,}
+		template_name = 'courses/announcement_mail.html'
+		enrollments = Enrollment.objects.filter(course=instance.course, status=1)
+		for enrollment in enrollments:
+			recipient_list = [enrollment.user.email]
+			send_mail_template(subject, template_name,context, recipient_list)
