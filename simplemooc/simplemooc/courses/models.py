@@ -71,10 +71,49 @@ class Course(models.Model):
 		verbose_name_plural = 'Cursos'
 		#este atributo gere a ordenação nesse caso estamos ordenando pelo nome asc
 		#se quisessemos ordenar pelo nome desc seria -name
-		ordering = ['name'] 
+		ordering = ['name']
+
+# classe Aula
+class Lesson(models.Model):
+	name = models.CharField('Nome', max_length=100)
+	description = models.TextField('Descricao', blank=True)
+	number = models.IntegerField('Número (ordem)', blank=True, default=0) 	# numero para ordenação das aulas
+	release_date = models.DateField('data de liberação',blank=True, null=True)
+
+	# ligação com o curso
+	course = models.ForeignKey(Course, verbose_name='Curso', on_delete=models.PROTECT, related_name='lessons')
+
+	created_at = models.DateTimeField('Criado em',auto_now_add=True)
+	updated_at = models.DateTimeField('Atualizado em', auto_now=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name= 'Aula'
+		verbose_name_plural = ' Aulas'
+		ordering=['-number']
+
+# classe de conteudos/materiais
+class Material(models.Model):
+	name = models.CharField('Nome', max_length=100)
+	embededd = models.TextField('Video Embededd', blank=True) # servir para colocar videos do youtube/vmeo/coisas em flash
+	file = models.FileField(upload_to='lessons/materials', blank=True, null=True) # pasta de destino dos arquivos materiais
+
+	# ligação com lição
+	lesson = models.ForeignKey(Lesson, verbose_name='aula', on_delete=models.PROTECT, related_name='materials')
+
+	def is_embededd(self):
+		return bool(self.embededd)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = 'Material'
+		verbose_name_plural = 'Materiais'
 
 # Inscrição no curso
-
 class Enrollment(models.Model):
 	# consjunto de opções uma tupla de tuplas 
 	STATUS_CHOICES = {

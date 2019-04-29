@@ -1,6 +1,6 @@
 from django.contrib import admin
 #importar model que queremos cadastrar no admin
-from .models import Course, Enrollment, Announcement ,Comment 
+from .models import Course, Enrollment, Announcement ,Comment ,Lesson, Material
 # Register your models here.registra os models para ser reconhecidos pelo Django
 
 
@@ -17,4 +17,4 @@ class CourseAdmin(admin.ModelAdmin):
 
 #registra o curso
 admin.site.register(Course, CourseAdmin)
-admin.site.register([Enrollment,Announcement,Comment])
+admin.site.register([Enrollment,Announcement,Comment,Lesson, Material])
