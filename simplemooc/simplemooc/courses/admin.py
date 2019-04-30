@@ -14,7 +14,29 @@ class CourseAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'slug':('name',)} # aqui p slug vai ser baseado no nome do curso e sofrerá os replaces
 											 # necessários para satisfazer o tipo slug
 
+# inline model admin
+# isso possibilita que, quando formos inserir uma aula, possamos também inserir um material no memso contexto
+class MaterialInlineAdmin(admin.TabularInline):
+	model = Material
 
-#registra o curso
+
+#custom admin 
+class LessonAdmin(admin.ModelAdmin):
+	# O que vai ser exibido no nosso admin aula
+	list_display = ['name', 'number', 'course','release_date']
+	# Campos de pesquisa
+	search_fields = ['name', ' description']
+	# filtragem lateral ordenando pela data
+	list_filter = ['created_at']
+
+	# recupera a lista de conteudos que devem ser adicionadas no contexto de adicionar uma aula(Lesson)
+	# no nosso caso é o Material que esta referenciado como model em MaterialInlineAdmin
+	# isso nos gera uma lista de formularios materiais
+	inlines = [MaterialInlineAdmin]
+
+
+#registra o models no admin
 admin.site.register(Course, CourseAdmin)
-admin.site.register([Enrollment,Announcement,Comment,Lesson, Material])
+admin.site.register(Lesson, LessonAdmin)
+admin.site.register([Enrollment,Announcement,Comment, Material])
+
