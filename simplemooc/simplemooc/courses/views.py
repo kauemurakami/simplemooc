@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import Course , Enrollment, Announcement
+from .models import Course , Enrollment, Announcement, Lesson 
 from .forms import ContactCourse , CommentForm
 from .decorators import enrollment_required
 from django.contrib.auth.decorators import login_required
@@ -72,7 +72,7 @@ def announcements(request, slug):
 	return render(request, template_name, context)
 
 @login_required
-@enrollment_required
+@enrollment_required # trazendo o course dentro do request sempre que for usado
 def show_announcement(request, slug, pk):
 	course = request.course
 	announcement = get_object_or_404(course.announcements.all(), pk=pk)
@@ -90,8 +90,29 @@ def show_announcement(request, slug, pk):
 	return render(request, template_name, context)
 
 #listagem de aulas
+@login_required
+@enrollment_required
+def lessons(request, slug):
+	course = request.course
+	template_name = 'courses/lessons.html'
+	lessons = course.release_lessons()
+	if request.user.is_staff:
+		lessons = course.lessons.all()
+	context = { 'course':course, 'lessons':lessons}
+	return render(request, template_name, context)
 
-
+# aula
+@login_required
+@enrollment_required
+def lesson(request, slug, pk):
+	course = request.course
+	lesson = get_object_or_404(Lesson, pk=pk ,course=course) # inseguro pois o usuario pode manipular a url
+	if not request.user.is_staff and not lesson.is_avaible(): # verifica se é staff e se a aula nao estadisponivel
+		messages.error(request, 'Está aula não está disponível')
+		redirect('courses/lessons.html', slug=course.slug)
+	template_name = 'courses/lesson.html'
+	context = { 'course':course, 'lesson':lesson }
+	return render(request, template_name, context)
 
 """com busca apartir da pk
 def details(request, pk): #pk é a variavel agrupada da expressão regular no url

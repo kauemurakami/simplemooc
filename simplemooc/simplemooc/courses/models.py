@@ -65,6 +65,12 @@ class Course(models.Model):
 	def get_absolute_url(self):
 		return reverse('courses:details', args=[self.slug])
 
+	# consulta para retornar todas as aulas do curso disponiveis
+	def release_lessons(self):
+		today = timezone.now().date()
+		return self.lessons.filter(release_date__lte=today) # filter __gte = MAIOR OU IGUAL
+
+
 	#aqui melhoramos o modo como apresentamos o nome da nossa classe e o nome do seu objeto no admin panel
 	class Meta:
 		verbose_name = 'Curso'
@@ -88,6 +94,13 @@ class Lesson(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	# verifica se a aula ja esta disponivel de acordo com a data
+	def is_avaible(self):
+		if self.release_date:
+			today = timezone.now().date()
+			return self.release_date <= today
+		return False
 
 	class Meta:
 		verbose_name= 'Aula'

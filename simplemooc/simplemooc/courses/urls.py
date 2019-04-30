@@ -16,5 +16,7 @@ urlpatterns = [
 	path('<slug:slug>/cancelar-inscricao/', views.undo_enrollment, name='undo_enrollment'), #w = conteudos alfanumericos _ e - o que pode coter no slug
 	path('<slug:slug>/anuncios/', views.announcements, name='announcements'), #w = conteudos alfanumericos _ e - o que pode coter no slug
 	path('<slug:slug>/anuncios/<int:pk>', views.show_announcement, name='show_announcement'), #w = conteudos alfanumericos _ e - o que pode coter no slug
+	path('<slug:slug>/aulas/', views.lessons, name='lessons'), 
+	path('<slug:slug>/aulas/<int:pk>', views.lesson, name='lesson'), 
 
 ]
