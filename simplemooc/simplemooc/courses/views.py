@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from .models import Course , Enrollment, Announcement
 from .forms import ContactCourse , CommentForm
+from .decorators import enrollment_required
 from django.contrib.auth.decorators import login_required
 # Create your views here. 
 # index de courses
@@ -19,10 +20,6 @@ def details(request, slug): #slug é a variavel que é criada na criação d ocu
 		if form.is_valid():
 			is_valid = True  # verifica se o formulario recebido é valido
 			form.send_mail(course,)
-			print(form.cleaned_data)
-			# ou acesando pelos indices
-			print(form.cleaned_data['email'])
-			print(form.cleaned_data['name'])
 			form = ContactCourse() # limpando o formulario
 	else:
 		form = ContactCourse()
@@ -67,30 +64,17 @@ def undo_enrollment(request, slug):
 
 #anuncios
 @login_required
+@enrollment_required
 def announcements(request, slug):
-	course = get_object_or_404(Course, slug=slug)
-	#verifica se o usuario é um staff ou não (admin)
-	if not request.user.is_staff: 
-		enrollment = get_object_or_404(Enrollment, user=request.user,course=course) # busca a inscrição do aluno
-		#ou retorna a inscriçõa ou erro caso não esteja inscrito  no curso
-		if not enrollment.is_aproved():
-			messages.error(request, 'Sua inscrição está pendente')
-			return redirect('accounts:dashboard')
+	course = request.course
 	template_name = 'courses/announcements.html'
 	context = {'course':course , 'announcements':course.announcements.all(), }
 	return render(request, template_name, context)
 
 @login_required
+@enrollment_required
 def show_announcement(request, slug, pk):
-	course = get_object_or_404(Course, slug=slug)
-	#recupera formulario CommentForm
-	#verifica se o usuario é um staff ou não (admin)
-	if not request.user.is_staff: 
-		enrollment = get_object_or_404(Enrollment, user=request.user,course=course) # busca a inscrição do aluno
-		#ou retorna a inscriçõa ou erro caso não esteja inscrito  no curso
-		if not enrollment.is_aproved():
-			messages.error(request, 'Sua inscrição está pendente')
-			return redirect('accounts:dashboard')
+	course = request.course
 	announcement = get_object_or_404(course.announcements.all(), pk=pk)
 	form = CommentForm(request.POST or None)
 	if form.is_valid():
@@ -104,6 +88,10 @@ def show_announcement(request, slug, pk):
 	template_name = 'courses/show_announcement.html'
 	context = {'course':course, 'announcement': announcement, 'form': form,}
 	return render(request, template_name, context)
+
+#listagem de aulas
+
+
 
 """com busca apartir da pk
 def details(request, pk): #pk é a variavel agrupada da expressão regular no url
