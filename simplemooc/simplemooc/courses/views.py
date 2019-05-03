@@ -98,7 +98,7 @@ def lessons(request, slug):
 	lessons = course.release_lessons()
 	if request.user.is_staff:
 		lessons = course.lessons.all()
-	context = { 'course':course, 'lessons':lessons}
+	context = { 'course':course, 'lessons':lessons ,}
 	return render(request, template_name, context)
 
 # aula
@@ -111,8 +111,29 @@ def lesson(request, slug, pk):
 		messages.error(request, 'Está aula não está disponível')
 		redirect('courses/lessons.html', slug=course.slug)
 	template_name = 'courses/lesson.html'
-	context = { 'course':course, 'lesson':lesson }
+	context = { 'course':course, 'lesson':lesson ,}
 	return render(request, template_name, context)
+
+
+# material
+@login_required
+@enrollment_required
+def material(request, slug, pk):
+    course = request.course
+    material = get_object_or_404(Material, pk=pk, lesson__course=course)
+    lesson = material.lesson
+    if not request.user.is_staff and not lesson.is_available():
+        messages.error(request, 'Este material não está disponível')
+        return redirect('courses:lesson', slug=course.slug, pk=lesson.pk)
+    if not material.is_embedded():
+        return redirect(material.file.url)
+    template = 'courses/material.html'
+    context = {
+        'course': course,
+        'lesson': lesson,
+        'material': material,
+    }
+    return render(request, template, context)
 
 """com busca apartir da pk
 def details(request, pk): #pk é a variavel agrupada da expressão regular no url

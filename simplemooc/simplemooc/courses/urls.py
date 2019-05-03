@@ -18,5 +18,6 @@ urlpatterns = [
 	path('<slug:slug>/anuncios/<int:pk>', views.show_announcement, name='show_announcement'), #w = conteudos alfanumericos _ e - o que pode coter no slug
 	path('<slug:slug>/aulas/', views.lessons, name='lessons'), 
 	path('<slug:slug>/aulas/<int:pk>', views.lesson, name='lesson'), 
+    path('<slug:slug>/materiais/<int:pk>', views.material , name='material'),
 
 ]
