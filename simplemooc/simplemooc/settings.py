@@ -75,7 +75,6 @@ WSGI_APPLICATION = 'simplemooc.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
@@ -151,3 +150,14 @@ AUTH_USER_MODEL = 'accounts.User' #nome da app . o model
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_REDIRECT_URL = 'accounts:logout'
+
+
+# Heroku settings
+import dj_database_url
+DATABASES['default'] = dj_database_url.config()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO','https')
+ALLOWED_HOSTS = ['*']
+STATIC_ROOT = 'staticfiles'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), )
