@@ -18,7 +18,7 @@ class ContactCourse(forms.Form):
 		}
 
 		template_name = 'courses/contact_email.html'
-		send_email_template(subject, template_name , context ,[settings.CONTACT_EMAIL], )
+		send_mail_template(subject, template_name , context ,[settings.CONTACT_EMAIL], )
 
 #formulario de comentario
 class CommentForm(forms.ModelForm):
