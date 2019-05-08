@@ -38,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # LIBS
+    'taggit',
+    
+    # APP's
     'simplemooc.accounts',
     'simplemooc.core',
     'simplemooc.courses',
