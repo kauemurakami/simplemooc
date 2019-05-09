@@ -24,6 +24,7 @@ urlpatterns = [
 
     # accounts
     path('conta/', include('simplemooc.accounts.urls', namespace='accounts')),
+    path('forum/', include(('simplemooc.forum.urls', 'forum'), namespace = 'forum')), 
 
     path('cursos/',include(('simplemooc.courses.urls', 'courses'), namespace = 'courses')), 
     #ira nos redirecionar para o arquivo urls dentro da pasta COURSES
