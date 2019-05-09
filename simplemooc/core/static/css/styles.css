@@ -296,7 +296,7 @@ aside a, aside a:visited {
 }
 
 .pagination li {
-  display: inline;
+  display: inline-block;
 }
 
 .pagination a {
