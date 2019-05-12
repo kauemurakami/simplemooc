@@ -6,6 +6,7 @@ from .models import Thread , Reply
 class ThreadAdmin(admin.ModelAdmin):
 	list_display = ['title', 'author', 'created', 'modified']
 	search_fields = ['title', 'author__email'] #autor é uma fk/ outro model, para filtrar usamos o __ para ir no email
+	prepopulated_fields = { 'slug': ('title',)}
 
 class ReplyAdmin(admin.ModelAdmin):
 	list_display = ['thread', 'author', 'created', 'modified']

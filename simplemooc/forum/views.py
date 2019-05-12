@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, View, ListView
+from django.views.generic import (TemplateView, View, ListView, DetailView)
 
 from .models import Thread
 # Create your views here.
@@ -33,7 +33,15 @@ class ForumView(ListView):
 		context['tags'] = Thread.tags.all() # add /chama todas as tags associados a alguma instância dessa classe
 		return context
 
+# herda de outra genericview
+class ThreadView(DetailView): # por padrão procura parametros nomeados slug ou pk
+
+	model = Thread
+	template_name = 'forum/thread.html'
+
 	#obrigatorio passar o nome de um template, ou dentro da classe ou para o as_view()
 #variavel index vai receber o resultado do forumview as view e retorna uma função
 index = ForumView.as_view() #template name poderia vir aqui
 #as_view() retorna uma função semelhante a nossas funções padrões que retornam um http response para renderizar uma template
+thread = ThreadView.as_view()
+

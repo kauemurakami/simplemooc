@@ -6,6 +6,8 @@ from taggit.managers import TaggableManager
 class Thread(models.Model):
 
 	title = models.CharField('Titulo', max_length=100)
+	slug = models.SlugField('Identificador' ,max_length=100, unique=True)
+
 	body = models.TextField(u'Mensagem')
 	#related_name='cria a referencia para autor para todos os topicos que ele criou'
 	author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.PROTECT, verbose_name='Autor', related_name='threads')
