@@ -49,6 +49,11 @@ INSTALLED_APPS = [
     'simplemooc.forum',
 ]
 
+# template_context_processors isso disponibiliza algumas funções e varaiveis nos templates
+#from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+# para não perder o que ja tems disponiveis em nossos templates
+#TEMPLATE_CONTEXT_PROCESSORS = TCP + ('django.core.context_processors.request', )
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -78,7 +83,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'simplemooc.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

@@ -7,10 +7,24 @@ from .models import Thread
 #ListView herda de Template View logo todas as opções das duas classes estarao dispostas
 class ForumView(ListView):
 	
-	model = Thread
 	paginate_by = 2 #paginação de 10 em 10
 	#template_name = '' 
 	template_name = 'forum/index.html'
+
+	# uma das opções de customusação do listview
+	# p indicar o que voce quer lista , pode-se passar um model como parametro, ou uma queryset
+	def get_queryset(self):
+		queryset = Thread.objects.all()
+		order = self.request.GET.get('order', '') # recebe o parametro get e verifica se há algum parametro nomeado(dic) order
+		if order == 'views': # verificando o parametro get
+			queryset.order_by('-views') # ordenando deforma decrescente
+		elif order == 'answers':
+			queryset.order_by('-answers') # ordenando deforma decrescente
+
+		tag = self.kwargs.get('tag', '')# o dic tag ou vazio
+		if tag: # verifica se é a url com parametro tag ou a que não tem parametro
+			queryset = queryset.filter(tags__slug__icontains=tag) # filtra tags que o sluga contem
+		return queryset
 
 	# metodo que herda de ForumView, passando uma lista de parametros nomeados 
 	# chamamos a função novamente da classe pai (Forum View) retornando o contexto do template

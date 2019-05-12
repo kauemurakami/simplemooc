@@ -5,5 +5,6 @@ from simplemooc.forum import views
 urlpatterns = [
 
 	path('', views.index, name='index'), 
+	path('tag/<slug:tag>', views.index, name='index_tagged'), 
 
 ]
