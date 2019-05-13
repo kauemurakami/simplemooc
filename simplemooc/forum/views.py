@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from django.views.generic import (TemplateView, View, ListView, DetailView)
-
+from .forms import ReplyForm
 from .models import Thread
+from django.contrib import messages
 # Create your views here.
 
 #ListView herda de Template View logo todas as opções das duas classes estarao dispostas
@@ -38,6 +39,34 @@ class ThreadView(DetailView): # por padrão procura parametros nomeados slug ou 
 
 	model = Thread
 	template_name = 'forum/thread.html'
+	
+	#contexto do template
+	def get_context_data(self, **kwargs):
+		context = super(ThreadView, self).get_context_data(**kwargs)
+		context['tags'] = Thread.tags.all() # add /chama todas as tags associados a alguma instância dessa classe
+		context['form'] = ReplyForm(self.request.POST or None) # tenta validar o formulario / se esta vazio se for none não é valido, só vamos prencher se for um queest  post e estiver preenchido
+		return context
+
+	def post(self, request, *args, **kwargs):
+
+		# verificamos se esta logado
+		if not self.request.user.is_authenticated():
+			messages.error(self.request, 'Faça o Login para responder a um tópico')
+			return redirect(self.request.path)
+
+		self.object = self.get_object()
+		context = self.get_context_data(object=self.object)
+		form = context['form']
+		if form.is_valid():
+			reply = form.save(commit=False) #preenche os dados do formulário no objeto
+			reply.thread = self.object
+			reply.author = self.request.user
+			reply.save()
+			messages.success(self.request, 'A sua resposta foi enviada com sucesso')
+			context['form'] = ReplyForm() # esvaziando formulário 
+		return self.render_to_response(context)
+
+
 
 	#obrigatorio passar o nome de um template, ou dentro da classe ou para o as_view()
 #variavel index vai receber o resultado do forumview as view e retorna uma função

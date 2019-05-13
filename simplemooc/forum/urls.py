@@ -8,6 +8,6 @@ urlpatterns = [
 
 	path('', views.index, name='index'), 
 	path('tag/<slug:tag>', views.index, name='index_tagged'), 
-	path('<slug:slug>', views.thread, name='thread'), 
+	path('forum/<slug:slug>/', views.thread, name='thread'), 
 
 ]
