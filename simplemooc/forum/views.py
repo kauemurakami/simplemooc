@@ -50,7 +50,7 @@ class ThreadView(DetailView): # por padrão procura parametros nomeados slug ou 
 	def post(self, request, *args, **kwargs):
 
 		# verificamos se esta logado
-		if not self.request.user.is_authenticated():
+		if not self.request.user.is_authenticated:
 			messages.error(self.request, 'Faça o Login para responder a um tópico')
 			return redirect(self.request.path)
 
