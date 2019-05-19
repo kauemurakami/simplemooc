@@ -59,11 +59,12 @@ class ThreadView(DetailView): # por padrão procura parametros nomeados slug ou 
 		form = context['form']
 		if form.is_valid():
 			reply = form.save(commit=False) #preenche os dados do formulário no objeto
-			reply.thread = self.object
+			reply.thread = self.request.user
 			reply.author = self.request.user
 			reply.save()
 			messages.success(self.request, 'A sua resposta foi enviada com sucesso')
 			context['form'] = ReplyForm() # esvaziando formulário 
+			
 		return self.render_to_response(context)
 
 
